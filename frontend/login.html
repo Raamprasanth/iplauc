@@ -864,7 +864,7 @@
         <div class="card">
 
             <!-- ══ GOOGLE SIGN IN PANEL ══ -->
-            <div class="panel active" id="panelSignIn" style="text-align: center;">
+            <div class="panel" id="panelSignIn" style="display: none; text-align: center;">
                 <div class="panel-header">
                     <div class="panel-title" style="color:var(--gold); font-size: 1.8rem; letter-spacing: 3px;">SECURE ACCESS</div>
                     <div class="panel-desc" style="color: #8892b0; font-size: 0.85rem; margin-top: 0.5rem;">Authenticate with Google to enter the arena</div>
@@ -893,7 +893,7 @@
             </div>
 
             <!-- Role Selector -->
-            <div class="role-selector" id="roleSelector" style="display: none;">
+            <div class="role-selector" id="roleSelector" style="display: flex;">
                 <button class="role-btn active" id="btnAuctioneer" onclick="switchRole('auctioneer')">
                     <span class="role-icon">🎙️</span> AUCTIONEER
                 </button>
@@ -903,7 +903,7 @@
             </div>
 
             <!-- ══ AUCTIONEER PANEL ══ -->
-            <div class="panel" id="panelAuctioneer">
+            <div class="panel active" id="panelAuctioneer">
 
                 <!-- Step 1: Create Room -->
                 <div id="stepCreate">
