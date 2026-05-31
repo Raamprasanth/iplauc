@@ -158,11 +158,19 @@
             position: fixed;
             inset: 0;
             z-index: 1; /* above animated bg but below content */
-            background: url('https://images.unsplash.com/photo-1531415074968-036ba1b575da?auto=format&fit=crop&q=80&w=2000') no-repeat center center;
+            background: url('https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?auto=format&fit=crop&q=80&w=2000') no-repeat center center;
             background-size: cover;
-            filter: brightness(0.3) contrast(1.2);
-            opacity: 0;
+            filter: grayscale(30%) sepia(20%) brightness(0.25) contrast(1.4);
+            opacity: 1;
             transition: opacity 1s ease;
+            pointer-events: none;
+        }
+
+        .bg-stadium::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url('data:image/svg+xml;utf8,<svg width="4" height="4" xmlns="http://www.w3.org/2000/svg"><rect width="4" height="4" fill="none"/><path d="M0 0l4 4ZM4 0L0 4Z" stroke="rgba(0,0,0,0.3)" stroke-width="1"/></svg>');
             pointer-events: none;
         }
 
@@ -391,52 +399,45 @@
         .logo-wrap {
             text-align: center;
             margin-bottom: 2rem;
+            position: relative;
         }
 
         .logo-icon {
-            font-size: 2.5rem;
+            font-size: 3rem;
             display: block;
-            margin-bottom: 0.2rem;
-            animation: bounce 2s ease-in-out infinite;
-        }
-
-        @keyframes bounce {
-
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-6px);
-            }
+            margin-bottom: 0.5rem;
+            filter: drop-shadow(2px 2px 0px #000);
         }
 
         .logo-title {
             font-family: var(--font-d);
-            font-size: 2.6rem;
-            letter-spacing: 5px;
-            color: var(--gold);
-            text-shadow: 0 0 30px rgba(245, 184, 0, 0.4);
+            font-size: 3.2rem;
+            letter-spacing: 8px;
+            color: #fff;
+            text-shadow: 4px 4px 0px #000, -2px -2px 0px #1b4d24;
             line-height: 1;
+            text-transform: uppercase;
         }
 
         .logo-sub {
-            font-family: var(--font-m);
-            font-size: 0.6rem;
-            letter-spacing: 4px;
-            color: var(--muted);
-            margin-top: 0.4rem;
+            font-family: var(--font-d);
+            font-size: 1.2rem;
+            letter-spacing: 8px;
+            color: var(--green);
+            margin-top: 0.5rem;
+            text-shadow: 2px 2px 0px #000;
         }
 
-        /* ── CARD ── */
+        /* ── CARD (GRITTY TEXTURE) ── */
         .card {
             width: 100%;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            padding: 1.5rem 1.5rem;
+            background: radial-gradient(circle at top right, #1a201c, #0a0c0a);
+            border: 2px solid #2a382d;
+            border-radius: 8px;
+            padding: 2.5rem 2rem;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.9), inset 0 0 40px rgba(0,0,0,0.8);
         }
 
         .card::before {
@@ -445,54 +446,68 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--gold), transparent);
-            opacity: 0.6;
+            height: 4px;
+            background: linear-gradient(90deg, #1b4d24, #00e676, #1b4d24);
         }
 
-        /* ── GOOGLE SIGN-IN BOX ── */
+        /* ── GOOGLE SIGN-IN (ESPORTS BUTTON) ── */
         .google-auth-box {
-            background: rgba(10, 15, 24, 0.6);
-            border: 1px solid var(--border2);
-            padding: 2.5rem 1.5rem;
-            margin: 2rem 0;
+            background: #000;
+            border: 2px solid #333;
+            padding: 2rem 1.5rem;
+            margin: 1.5rem 0;
             display: flex;
             flex-direction: column;
             align-items: center;
-            backdrop-filter: blur(8px);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
             position: relative;
             overflow: hidden;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
+            border-radius: 4px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
         }
 
         .google-auth-box:hover {
-            border-color: var(--cyan);
-            box-shadow: 0 8px 32px rgba(0, 212, 255, 0.15);
+            border-color: #00e676;
+            background: #050a06;
+            box-shadow: inset 0 0 20px rgba(0, 230, 118, 0.1), 0 0 20px rgba(0, 230, 118, 0.2);
         }
 
         .google-auth-box::before {
+            content: 'SECURE AUTHENTICATION';
+            position: absolute;
+            top: 4px;
+            left: 6px;
+            font-family: var(--font-m);
+            font-size: 8px;
+            color: #444;
+            letter-spacing: 2px;
+        }
+
+        .google-auth-box::after {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
+            bottom: 0;
             right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--cyan), transparent);
-            opacity: 0.8;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, transparent 50%, #333 50%);
+            transition: 0.2s;
+        }
+        .google-auth-box:hover::after {
+            background: linear-gradient(135deg, transparent 50%, #00e676 50%);
         }
 
         .google-auth-icon {
-            font-size: 3rem;
-            margin-bottom: 1.5rem;
-            color: var(--cyan);
-            text-shadow: 0 0 15px var(--cyan-dim);
-            animation: pulse-glow 2.5s infinite alternate;
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            color: #2a382d;
+            text-shadow: 1px 1px 0px #00e676;
+            transition: 0.3s;
         }
         
-        @keyframes pulse-glow {
-            from { text-shadow: 0 0 10px rgba(0, 212, 255, 0.2); transform: scale(1); }
-            to { text-shadow: 0 0 30px rgba(0, 212, 255, 0.6); transform: scale(1.08); }
+        .google-auth-box:hover .google-auth-icon {
+            color: #00e676;
+            text-shadow: 0 0 15px rgba(0,230,118,0.5);
         }
 
         /* ── ROLE SELECTOR (GRITTY STADIUM THEME) ── */
