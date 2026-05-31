@@ -43,8 +43,9 @@ app.use('/api', (req, res, next) => {
     next();
 });
 
-// Serve static frontend files from frontend
-app.use(express.static(path.join(__dirname, '../frontend')));
+// Serve frontend static files in production or when merged
+const frontendBuildPath = path.join(__dirname, '../frontend/build');
+app.use(express.static(frontendBuildPath));
 
 // API Routes
 app.use('/api', indexRoutes);
