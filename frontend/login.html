@@ -288,43 +288,67 @@
 
         /* ── ROLE SELECTOR ── */
         .role-selector {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0;
+            display: flex;
+            background: rgba(0, 0, 0, 0.4);
             border: 1px solid var(--border2);
-            margin-bottom: 2rem;
-            overflow: hidden;
+            border-radius: 50px;
+            margin-bottom: 2.5rem;
+            position: relative;
+            padding: 4px;
+            box-shadow: inset 0 4px 15px rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+        }
+
+        .role-selector::before {
+            content: '';
+            position: absolute;
+            top: 4px;
+            bottom: 4px;
+            width: calc(50% - 6px);
+            left: 4px;
+            background: rgba(245, 184, 0, 0.15);
+            border: 1px solid var(--gold);
+            border-radius: 50px;
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55), background 0.4s, border-color 0.4s;
+            z-index: 0;
+            box-shadow: 0 4px 15px rgba(245, 184, 0, 0.3);
+        }
+
+        .role-selector:has(#btnPlayer.active)::before {
+            transform: translateX(100%);
+            margin-left: 4px;
+            background: rgba(0, 212, 255, 0.15);
+            border-color: var(--cyan);
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
         }
 
         .role-btn {
             background: transparent;
             border: none;
-            padding: 0.9rem 1rem;
+            flex: 1;
+            padding: 0.8rem 1rem;
             cursor: pointer;
             font-family: var(--font-d);
-            font-size: 1rem;
+            font-size: 1.1rem;
             letter-spacing: 2px;
             color: var(--muted);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.5rem;
-            transition: background 0.25s, color 0.25s;
+            gap: 0.6rem;
+            transition: color 0.3s, text-shadow 0.3s;
             position: relative;
-        }
-
-        .role-btn:first-child {
-            border-right: 1px solid var(--border2);
+            z-index: 1;
         }
 
         .role-btn.active {
-            background: var(--gold-dim);
             color: var(--gold);
+            text-shadow: 0 0 10px rgba(245, 184, 0, 0.6);
         }
 
-        .role-btn.active.player-active {
-            background: var(--cyan-dim);
+        #btnPlayer.active {
             color: var(--cyan);
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.6);
         }
 
         .role-btn .role-icon {
