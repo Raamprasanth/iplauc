@@ -49,7 +49,7 @@ app.use(express.static(path.join(__dirname, '../frontend')));
 // API Routes
 app.use('/api', indexRoutes);
 app.use('/api', loginRoutes); // Can keep or remove, we will add authRoutes
-const authRoutes = require('./routes/authroutes');
+const authRoutes = require('./api_routes/authroutes');
 app.use('/api/auth', authRoutes);
 app.use('/api', roomRoutes);
 app.use('/api', lobbyRoutes);
