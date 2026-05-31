@@ -72,6 +72,37 @@ const BidLogSchema = new mongoose.Schema({
     timestamp:     { type: Date, default: Date.now },
 }, { _id: false });
 
+/* ── Sub-schema: Match ── */
+const MatchSchema = new mongoose.Schema({
+    matchId:   { type: String, required: true },
+    team1:     { type: String, required: true }, // team localId
+    team2:     { type: String, required: true }, // team localId
+    status:    { type: String, enum: ['PENDING', 'PLAYED'], default: 'PENDING' },
+    winner:    { type: String, default: null },  // team localId or 'TIE'
+    score1:    { type: String, default: '' },
+    score2:    { type: String, default: '' },
+    summary:   { type: String, default: '' }
+}, { _id: false });
+
+/* ── Sub-schema: Team Standing ── */
+const StandingSchema = new mongoose.Schema({
+    teamLocalId: { type: String, required: true },
+    played:      { type: Number, default: 0 },
+    won:         { type: Number, default: 0 },
+    lost:        { type: Number, default: 0 },
+    tied:        { type: Number, default: 0 },
+    points:      { type: Number, default: 0 },
+    nrr:         { type: Number, default: 0 }
+}, { _id: false });
+
+/* ── Sub-schema: Season ── */
+const SeasonSchema = new mongoose.Schema({
+    seasonNumber: { type: Number, required: true },
+    status:       { type: String, enum: ['PENDING', 'ACTIVE', 'COMPLETED'], default: 'PENDING' },
+    schedule:     [MatchSchema],
+    standings:    [StandingSchema]
+}, { _id: false });
+
 /* ── Main Lobby Schema ── */
 const LobbySchema = new mongoose.Schema({
     /* link to the room (optional, for multiplayer) */
@@ -93,7 +124,7 @@ const LobbySchema = new mongoose.Schema({
     /* auction state */
     status: {
         type: String,
-        enum: ['SETUP', 'LIVE', 'PAUSED', 'FINISHED'],
+        enum: ['SETUP', 'LIVE', 'PAUSED', 'FINISHED', 'SIMULATION', 'OFFSEASON', 'MINI_AUCTION'],
         default: 'SETUP',
     },
 
@@ -113,6 +144,10 @@ const LobbySchema = new mongoose.Schema({
     players:  [LobbyPlayerSchema],
     teams:    [LobbyTeamSchema],
     bidLog:   [BidLogSchema],
+
+    /* dynasty / simulation state */
+    currentSeason: { type: Number, default: 1 },
+    seasons:       [SeasonSchema],
 
     /* auto-expire lobbies after 7 days */
     expiresAt: {

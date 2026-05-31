@@ -56,6 +56,9 @@ app.use('/api', roomRoutes);
 app.use('/api', lobbyRoutes);
 app.use('/api/ai', aiRoutes);
 
+const simRoutes = require('./api_routes/simroutes');
+app.use('/api', simRoutes);
+
 // MongoDB Connection
 const mongoURI = process.env.MONGO_URI;
 if (!mongoURI) {
