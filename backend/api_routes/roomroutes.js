@@ -7,7 +7,6 @@ const express = require('express');
 const router  = express.Router();
 const Room    = require('../models/Room');
 
-const ROOM_VALIDITY_MS = 3 * 24 * 60 * 60 * 1000; // 72 hours
 
 // Helper: random 6-char alphanumeric code (no O, 0, I, 1 to avoid confusion)
 function generateCode() {
@@ -23,7 +22,7 @@ function generateCode() {
 ------------------------------------------------------------------ */
 router.post('/rooms', async (req, res) => {
     try {
-        const { auctioneerName, roomName, maxPlayers, budget, maxSquadSize, maxOverseas } = req.body;
+        const { auctioneerName, roomName, maxPlayers, budget, maxSquadSize, maxOverseas, expiryDays } = req.body;
 
         if (!auctioneerName || !roomName || !maxPlayers || !budget) {
             return res.status(400).json({ success: false, message: 'All fields are required.' });
@@ -38,9 +37,7 @@ router.post('/rooms', async (req, res) => {
             if (attempts > 20) throw new Error('Could not generate unique code.');
         } while (await Room.findOne({ code }));
 
-        const expiresAt = new Date(Date.now() + ROOM_VALIDITY_MS);
-
-        const room = await Room.create({
+        const roomData = {
             code,
             roomName,
             auctioneerName,
@@ -48,10 +45,16 @@ router.post('/rooms', async (req, res) => {
             budget: parseInt(budget),
             maxSquadSize: parseInt(maxSquadSize) || 25,
             maxOverseas: parseInt(maxOverseas) || 8,
-            expiresAt,
             players: [],
             status: 'WAITING'
-        });
+        };
+
+        const parsedExpiryDays = parseInt(expiryDays) || 3;
+        if (parsedExpiryDays !== -1) {
+            roomData.expiresAt = new Date(Date.now() + parsedExpiryDays * 24 * 60 * 60 * 1000);
+        }
+
+        const room = await Room.create(roomData);
 
         res.status(201).json({ success: true, data: room });
     } catch (err) {
@@ -68,7 +71,7 @@ router.get('/rooms/:code', async (req, res) => {
         const room = await Room.findOne({ code });
 
         if (!room)                          return res.status(404).json({ success: false, message: 'Room not found.' });
-        if (new Date() > room.expiresAt)    return res.status(410).json({ success: false, message: 'Room has expired.' });
+        if (room.expiresAt && new Date() > room.expiresAt)    return res.status(410).json({ success: false, message: 'Room has expired.' });
 
         res.status(200).json({ success: true, data: room });
     } catch (err) {
@@ -94,7 +97,7 @@ router.post('/rooms/:code/join', async (req, res) => {
 
         const room = await Room.findOne({ code });
         if (!room)                       return res.status(404).json({ success: false, message: 'Room not found.' });
-        if (new Date() > room.expiresAt) return res.status(410).json({ success: false, message: 'Room has expired.' });
+        if (room.expiresAt && new Date() > room.expiresAt) return res.status(410).json({ success: false, message: 'Room has expired.' });
         
         const existingPlayer = room.players.find(p => p.teamId === teamId.toUpperCase());
         if (existingPlayer) {

@@ -897,6 +897,16 @@
                                 <option value="10">10 Players</option>
                             </select>
                         </div>
+
+                        <div class="field">
+                            <label>Room Expiry</label>
+                            <select id="aucExpiry">
+                                <option value="1">1 Day</option>
+                                <option value="3" selected>3 Days</option>
+                                <option value="6">6 Days</option>
+                                <option value="-1">No Expiry (Never)</option>
+                            </select>
+                        </div>
                     </div>
 
                     <button class="btn btn-gold" onclick="createRoom()">
@@ -1240,6 +1250,7 @@
             const budget   = parseInt(document.getElementById('aucBudget').value);
             const maxSquadSize = parseInt(document.getElementById('aucMaxSquadSize').value);
             const maxOverseas  = parseInt(document.getElementById('aucMaxOverseas').value);
+            const expiryDays   = parseInt(document.getElementById('aucExpiry').value);
 
             if (!name)     { showToast('⚠ ENTER YOUR NAME', 'error');      return; }
             if (!roomName) { showToast('⚠ ENTER A ROOM NAME', 'error');    return; }
@@ -1251,7 +1262,7 @@
                 const res  = await fetch(`${API}/rooms`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ auctioneerName: name, roomName, maxPlayers: maxP, budget, maxSquadSize, maxOverseas })
+                    body: JSON.stringify({ auctioneerName: name, roomName, maxPlayers: maxP, budget, maxSquadSize, maxOverseas, expiryDays })
                 });
                 const json = await res.json();
                 if (!res.ok) throw new Error(json.message || 'Failed to create room.');
@@ -1269,7 +1280,7 @@
                 document.getElementById('infoSquadSize').textContent    = room.maxSquadSize;
                 document.getElementById('infoOverseas').textContent     = room.maxOverseas;
 
-                startCountdown(new Date(room.expiresAt).getTime());
+                startCountdown(room.expiresAt ? new Date(room.expiresAt).getTime() : null);
                 startPollingPlayers(room.code);
                 showToast('✅ ROOM CREATED!', 'success');
             } catch (err) {
@@ -1316,7 +1327,7 @@
                 document.getElementById('infoBudget').textContent       = `₹${room.budget}CR`;
                 document.getElementById('infoMax').textContent          = room.maxPlayers;
 
-                startCountdown(new Date(room.expiresAt).getTime());
+                startCountdown(room.expiresAt ? new Date(room.expiresAt).getTime() : null);
                 startPollingPlayers(code);
                 showToast('✅ ROOM RESUMED!', 'success');
             } catch (err) {
@@ -1482,19 +1493,40 @@
 
         function startCountdown(expiresAtMs) {
             if (countdownInterval) clearInterval(countdownInterval);
+            
+            const display = document.getElementById('countdownDisplay');
+            const expiryText = document.getElementById('expiryText');
+            const container = document.getElementById('countdownContainer');
+            
+            if (!expiresAtMs) {
+                if (display) display.textContent = 'NEVER';
+                if (expiryText) {
+                    expiryText.textContent = 'NO EXPIRY (VALID FOREVER)';
+                    expiryText.className = 'expiry-valid';
+                }
+                if (container) container.style.display = 'none';
+                return;
+            }
+            
+            if (container) container.style.display = 'flex';
+
             function tick() {
                 const remaining = expiresAtMs - Date.now();
-                const display   = formatCountdown(remaining);
-                document.getElementById('countdownDisplay').textContent = display;
-                document.getElementById('expiryText').textContent       = `VALID FOR ${display}`;
-                const el = document.getElementById('expiryText');
+                const formatted = formatCountdown(remaining);
+                if (display) display.textContent = formatted;
+                if (expiryText) expiryText.textContent = `VALID FOR ${formatted}`;
+                
                 if (remaining <= 0) {
-                    el.textContent = 'ROOM EXPIRED'; el.className = ''; el.style.color = 'var(--red)';
+                    if (expiryText) {
+                        expiryText.textContent = 'ROOM EXPIRED'; 
+                        expiryText.className = ''; 
+                        expiryText.style.color = 'var(--red)';
+                    }
                     clearInterval(countdownInterval);
                 } else if (remaining < 3600000) {
-                    el.className = 'expiry-warning';
+                    if (expiryText) expiryText.className = 'expiry-warning';
                 } else {
-                    el.className = 'expiry-valid';
+                    if (expiryText) expiryText.className = 'expiry-valid';
                 }
             }
             tick();
@@ -1667,7 +1699,7 @@
 
                 verifiedRoom = room;
                 status.className   = 'code-status show valid';
-                const remaining    = formatCountdown(new Date(room.expiresAt).getTime() - Date.now());
+                const remaining = room.expiresAt ? formatCountdown(new Date(room.expiresAt).getTime() - Date.now()) : 'NO EXPIRY';
                 status.textContent = `✔ "${room.roomName}" — HOST: ${room.auctioneerName} — EXPIRES IN ${remaining}`;
                 showToast(`ROOM FOUND: ${room.roomName}`, 'success');
                 renderTeamPicker(room);

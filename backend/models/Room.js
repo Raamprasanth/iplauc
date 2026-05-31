@@ -63,7 +63,7 @@ const RoomSchema = new mongoose.Schema({
     players: [PlayerEntrySchema],
     expiresAt: {
         type: Date,
-        required: true,
+        required: false,
         index: { expireAfterSeconds: 0 }   // MongoDB TTL — auto-delete after expiry
     }
 }, { timestamps: true });
