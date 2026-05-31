@@ -363,6 +363,88 @@
         }
         .exit-btn:hover { background: #ff3b3b; border-color: #ff3b3b; color: #fff; }
 
+        /* ── GAME MODES CARDS (LOCKER ROOM) ── */
+        .gm-cards-container {
+            display: flex;
+            gap: 20px;
+            padding: 25px;
+            justify-content: center;
+        }
+
+        .gm-card {
+            flex: 1;
+            height: 400px;
+            background: #0a0a0c;
+            border: 2px solid #222;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: flex-end;
+            padding: 25px;
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.8);
+        }
+
+        .gm-card:hover {
+            transform: scale(1.02) translateY(-10px);
+        }
+
+        .gm-bg {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            opacity: 0.4;
+            transition: 0.4s;
+            filter: grayscale(80%) contrast(1.2);
+            z-index: 0;
+        }
+        
+        .gm-card:hover .gm-bg {
+            opacity: 0.8;
+            filter: grayscale(0%) contrast(1.1);
+        }
+
+        .gm-auction .gm-bg { background-image: url('https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?w=800'); }
+        .gm-dynasty .gm-bg { background-image: url('https://images.unsplash.com/photo-1508344928928-7137b29de216?w=800'); }
+        .gm-quick .gm-bg { background-image: url('https://images.unsplash.com/photo-1518605368461-1ee1252329dc?w=800'); }
+
+        .gm-auction:hover { border-color: var(--gold); box-shadow: 0 10px 30px rgba(245,184,0,0.2), inset 0 0 50px rgba(245,184,0,0.1); }
+        .gm-dynasty:hover { border-color: var(--green); box-shadow: 0 10px 30px rgba(0,255,0,0.2), inset 0 0 50px rgba(0,255,0,0.1); }
+        .gm-quick:hover { border-color: var(--cyan); box-shadow: 0 10px 30px rgba(0,212,255,0.2), inset 0 0 50px rgba(0,212,255,0.1); }
+
+        .gm-content {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            text-align: left;
+        }
+
+        .gm-title {
+            font-family: var(--font-d);
+            font-size: 48px;
+            color: #fff;
+            line-height: 1;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 10px #000;
+            transition: 0.3s;
+        }
+
+        .gm-auction:hover .gm-title { color: var(--gold); }
+        .gm-dynasty:hover .gm-title { color: var(--green); }
+        .gm-quick:hover .gm-title { color: var(--cyan); }
+
+        .gm-subtitle {
+            font-family: var(--font-m);
+            font-size: 14px;
+            color: #ccc;
+            letter-spacing: 2px;
+            margin-top: 10px;
+            text-shadow: 1px 1px 5px #000;
+        }
+
         /* Hide the old role selector */
         .role-selector { display: none !important; }
 
@@ -1410,12 +1492,19 @@
         
         <div class="metallic-frame">
             <div class="frame-header-tabs">
-                <div class="frame-tab">LOBBY</div>
-                <div class="frame-tab active">ROLE SELECTION</div>
-                <div class="frame-tab">GAME MODES</div>
+                <div class="frame-tab" id="tabLobby" onclick="switchFrameTab('lobby')">LOBBY</div>
+                <div class="frame-tab active" id="tabRole" onclick="switchFrameTab('role')">ROLE SELECTION</div>
+                <div class="frame-tab" id="tabGame" onclick="switchFrameTab('game')">GAME MODES</div>
             </div>
 
-            <div class="role-cards-container" id="roleCardsContainer">
+            <!-- TAB 1: LOBBY -->
+            <div id="tabContentLobby" style="display:none; padding: 60px; text-align: center; color: #888;">
+                <h2 style="font-family: var(--font-d); letter-spacing: 4px; font-size: 32px;">LOBBY BROWSER COMING SOON</h2>
+                <p style="font-family: var(--font-m); letter-spacing: 2px;">Find and join public rooms here.</p>
+            </div>
+
+            <!-- TAB 2: ROLE SELECTION -->
+            <div class="role-cards-container" id="tabContentRole">
                 <div class="rc-huge rc-auc" onclick="selectHugeRole('auctioneer')">
                     <div class="rc-title">AUCTIONEER</div>
                     <div class="rc-image"></div>
@@ -1440,6 +1529,31 @@
                             <li>WIN MATCHES</li>
                         </ul>
                         <button class="rc-btn">SELECT PLAYER</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: GAME MODES (LOCKER ROOM) -->
+            <div class="gm-cards-container" id="tabContentGame" style="display:none;">
+                <div class="gm-card gm-auction" onclick="switchFrameTab('role')">
+                    <div class="gm-bg"></div>
+                    <div class="gm-content">
+                        <div class="gm-title">MULTIPLAYER<br>AUCTION</div>
+                        <div class="gm-subtitle">THE CLASSIC DRAFT</div>
+                    </div>
+                </div>
+                <div class="gm-card gm-dynasty" onclick="window.location.href='simulation.html'">
+                    <div class="gm-bg"></div>
+                    <div class="gm-content">
+                        <div class="gm-title">DYNASTY<br>MODE</div>
+                        <div class="gm-subtitle">SINGLE PLAYER SIMULATION</div>
+                    </div>
+                </div>
+                <div class="gm-card gm-quick">
+                    <div class="gm-bg"></div>
+                    <div class="gm-content">
+                        <div class="gm-title">QUICK<br>MATCH</div>
+                        <div class="gm-subtitle">COMING SOON</div>
                     </div>
                 </div>
             </div>
@@ -1577,6 +1691,28 @@
             document.getElementById('btnPlayer').classList.toggle('player-active',     role === 'player');
             document.getElementById('panelAuctioneer').classList.toggle('active',      role === 'auctioneer');
             document.getElementById('panelPlayer').classList.toggle('active',          role === 'player');
+        }
+
+        function switchFrameTab(tabId) {
+            document.getElementById('tabLobby').classList.toggle('active', tabId === 'lobby');
+            document.getElementById('tabRole').classList.toggle('active', tabId === 'role');
+            document.getElementById('tabGame').classList.toggle('active', tabId === 'game');
+
+            document.getElementById('tabContentLobby').style.display = (tabId === 'lobby') ? 'block' : 'none';
+            document.getElementById('tabContentRole').style.display = (tabId === 'role') ? 'flex' : 'none';
+            document.getElementById('tabContentGame').style.display = (tabId === 'game') ? 'flex' : 'none';
+            
+            // Hide inner forms if we leave the role tab
+            if (tabId !== 'role') {
+                document.getElementById('innerFormsContainer').style.display = 'none';
+            } else if (document.getElementById('innerFormsMount').children.length === 0) {
+                // If returning to Role Tab and forms aren't mounted yet, show cards
+                document.getElementById('tabContentRole').style.display = 'flex';
+            } else {
+                // If forms are mounted, show inner forms instead of role cards
+                document.getElementById('tabContentRole').style.display = 'none';
+                document.getElementById('innerFormsContainer').style.display = 'block';
+            }
         }
 
         /* ══════════════════════════════
