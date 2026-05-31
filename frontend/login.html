@@ -153,6 +153,211 @@
             }
         }
 
+        /* ── STADIUM BACKGROUND ── */
+        .bg-stadium {
+            position: fixed;
+            inset: 0;
+            z-index: 1; /* above animated bg but below content */
+            background: url('https://images.unsplash.com/photo-1531415074968-036ba1b575da?auto=format&fit=crop&q=80&w=2000') no-repeat center center;
+            background-size: cover;
+            filter: brightness(0.3) contrast(1.2);
+            opacity: 0;
+            transition: opacity 1s ease;
+            pointer-events: none;
+        }
+
+        /* ── METALLIC FRAME ── */
+        .metallic-frame-wrapper {
+            position: relative;
+            z-index: 20;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            display: none;
+            animation: pageIn 0.6s ease both;
+        }
+
+        .huge-title {
+            font-family: var(--font-d);
+            font-size: 56px;
+            text-align: center;
+            color: #fff;
+            letter-spacing: 4px;
+            text-shadow: 2px 2px 0px #000;
+            margin-bottom: 20px;
+            line-height: 1.1;
+        }
+
+        .huge-title .gr { color: #ccc; font-size: 64px; display: block;}
+
+        .metallic-frame {
+            background: linear-gradient(180deg, #2a2d34, #121418);
+            border: 4px solid #4a4f58;
+            border-radius: 12px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,0,0,0.9);
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .frame-header-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            background: #111;
+            border-bottom: 2px solid #333;
+            padding: 15px 10px;
+        }
+
+        .frame-tab {
+            font-family: var(--font-d);
+            font-size: 22px;
+            color: #666;
+            letter-spacing: 2px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            padding: 0 5px 5px 5px;
+        }
+
+        .frame-tab.active {
+            color: var(--green);
+            border-bottom: 2px solid var(--green);
+            text-shadow: 0 0 10px rgba(0,255,0,0.4);
+        }
+
+        /* ── LARGE ROLE CARDS ── */
+        .role-cards-container {
+            display: flex;
+            gap: 20px;
+            padding: 25px;
+        }
+
+        .rc-huge {
+            flex: 1;
+            background: #050505;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid #333;
+            transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .rc-huge:hover {
+            transform: translateY(-5px);
+        }
+
+        .rc-auc {
+            border-color: #1b4d24;
+            box-shadow: 0 0 20px rgba(0,255,0,0.05);
+        }
+        .rc-auc:hover {
+            border-color: var(--green);
+            box-shadow: 0 0 40px rgba(0,255,0,0.2);
+        }
+        .rc-auc .rc-title { color: #fff; text-shadow: 0 0 15px rgba(0,255,0,0.5); }
+        .rc-auc .rc-btn { background: linear-gradient(180deg, #6ae580, #228b22); color: #000; box-shadow: 0 0 15px rgba(0,255,0,0.3); }
+
+        .rc-player {
+            border-color: #333;
+            box-shadow: 0 0 20px rgba(255,255,255,0.05);
+        }
+        .rc-player:hover {
+            border-color: #aaa;
+            box-shadow: 0 0 40px rgba(255,255,255,0.1);
+        }
+        .rc-player .rc-btn { background: linear-gradient(180deg, #444, #111); color: #fff; border: 1px solid #555; }
+
+        .rc-title {
+            font-family: var(--font-d);
+            font-size: 48px;
+            text-align: center;
+            padding: 15px 0;
+            letter-spacing: 3px;
+        }
+
+        .rc-image {
+            height: 250px;
+            background-size: cover;
+            background-position: center;
+            border-top: 1px solid #222;
+            border-bottom: 1px solid #222;
+        }
+        .rc-auc .rc-image { background-image: url('https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&q=80&w=600'); filter: grayscale(100%) sepia(100%) hue-rotate(80deg) saturate(200%) contrast(1.2); }
+        .rc-player .rc-image { background-image: url('https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?auto=format&fit=crop&q=80&w=600'); filter: grayscale(50%) contrast(1.2); }
+
+        .rc-content {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .rc-desc-title {
+            font-family: var(--font-d);
+            font-size: 22px;
+            letter-spacing: 1px;
+            color: #ddd;
+            margin-bottom: 15px;
+        }
+
+        .rc-bullets {
+            list-style-type: disc;
+            padding-left: 20px;
+            font-family: var(--font-b);
+            color: #aaa;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 25px;
+        }
+        .rc-bullets li { margin-bottom: 8px; }
+
+        .rc-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-family: var(--font-d);
+            font-size: 24px;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: filter 0.2s, transform 0.1s;
+        }
+        .rc-btn:hover { filter: brightness(1.2); }
+        .rc-btn:active { transform: scale(0.97); }
+
+        .frame-footer {
+            background: #0a0a0a;
+            padding: 15px 25px;
+            font-family: var(--font-d);
+            color: #888;
+            letter-spacing: 2px;
+            font-size: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #222;
+        }
+
+        .exit-btn {
+            background: #222;
+            color: #fff;
+            border: 1px solid #444;
+            padding: 6px 20px;
+            font-family: var(--font-d);
+            font-size: 16px;
+            letter-spacing: 1px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .exit-btn:hover { background: #ff3b3b; border-color: #ff3b3b; color: #fff; }
+
+        /* Hide the old role selector */
+        .role-selector { display: none !important; }
+
         /* ── MAIN LAYOUT ── */
         .login-container {
             position: relative;
@@ -164,7 +369,11 @@
             max-width: 400px;
             padding: 1.5rem 1rem;
             animation: pageIn 0.6s ease both;
+            transition: opacity 0.5s ease;
         }
+
+        /* ── BG STADIUM ── */
+        <div class="bg-stadium" id="bgStadium"></div>
 
         @keyframes pageIn {
             from {
@@ -870,9 +1079,10 @@
         <div class="bg-orb bg-orb-3"></div>
         <div class="bg-particles" id="particles"></div>
     </div>
+    <div class="bg-stadium" id="bgStadium"></div>
 
     <!-- Main -->
-    <div class="login-container">
+    <div class="login-container" id="loginContainer">
 
         <!-- Logo -->
         <div class="logo-wrap">
@@ -1176,9 +1386,61 @@
 
             </div><!-- /panelPlayer -->
 
-        </div><!-- /card -->
+        </div> <!-- /card -->
+    </div> <!-- /login-container -->
 
-        <div class="login-footer">
+    <!-- ── METALLIC FRAME FOR ROLE SELECTION ── -->
+    <div class="metallic-frame-wrapper" id="metallicFrameWrap">
+        <div class="huge-title">MULTIPLAYER <span class="gr">ROLE SELECTION</span></div>
+        
+        <div class="metallic-frame">
+            <div class="frame-header-tabs">
+                <div class="frame-tab">LOBBY</div>
+                <div class="frame-tab active">ROLE SELECTION</div>
+                <div class="frame-tab">GAME MODES</div>
+            </div>
+
+            <div class="role-cards-container" id="roleCardsContainer">
+                <div class="rc-huge rc-auc" onclick="selectHugeRole('auctioneer')">
+                    <div class="rc-title">AUCTIONEER</div>
+                    <div class="rc-image"></div>
+                    <div class="rc-content">
+                        <div class="rc-desc-title">STRATEGIZE & BUILD YOUR SQUAD</div>
+                        <ul class="rc-bullets">
+                            <li>MANAGE BUDGETS</li>
+                            <li>BID FOR PLAYERS</li>
+                            <li>LEAD YOUR TEAM</li>
+                        </ul>
+                        <button class="rc-btn">SELECT AUCTIONEER</button>
+                    </div>
+                </div>
+                <div class="rc-huge rc-player" onclick="selectHugeRole('player')">
+                    <div class="rc-title">PLAYER</div>
+                    <div class="rc-image"></div>
+                    <div class="rc-content">
+                        <div class="rc-desc-title">DOMINATE THE PITCH</div>
+                        <ul class="rc-bullets">
+                            <li>SHOWCASE SKILLS</li>
+                            <li>SCORE RUNS/TAKE WICKETS</li>
+                            <li>WIN MATCHES</li>
+                        </ul>
+                        <button class="rc-btn">SELECT PLAYER</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Inner Forms (Injected by JS) -->
+            <div id="innerFormsContainer" style="display:none; padding: 25px; background: rgba(0,0,0,0.5);">
+                <button onclick="backToCards()" style="background:transparent; color:#888; border:none; cursor:pointer; margin-bottom: 15px; font-family: 'Bebas Neue'; font-size: 20px;">◀ BACK TO ROLE SELECTION</button>
+                <div id="innerFormsMount"></div>
+            </div>
+
+            <div class="frame-footer">
+                <div>PLAYERS IN LOBBY: 1</div>
+                <button class="exit-btn" onclick="location.reload()">EXIT</button>
+            </div>
+        </div>
+    </div>      <div class="login-footer">
             <a href="index.html">← BACK TO HOME</a>
             &nbsp;·&nbsp;
             ROOMS VALID FOR 72 HOURS
@@ -1211,10 +1473,12 @@
                     sessionStorage.setItem('ipl_user', JSON.stringify(data.user));
                     showToast('Successfully signed in!', 'success');
                     
-                    // Hide Sign In panel and show role selector / auctioneer panel
-                    document.getElementById('panelSignIn').classList.remove('active');
-                    document.getElementById('roleSelector').style.display = 'grid';
-                    document.getElementById('panelAuctioneer').classList.add('active');
+                    // Hide Sign In panel and show role selector
+                    document.getElementById('loginContainer').style.display = 'none';
+                    
+                    // Show metallic UI
+                    document.getElementById('bgStadium').style.opacity = '1';
+                    document.getElementById('metallicFrameWrap').style.display = 'block';
                 } else {
                     showToast('Authentication failed.', 'error');
                 }
@@ -1268,6 +1532,29 @@
         /* ══════════════════════════════
            ROLE SWITCHING
         ══════════════════════════════ */
+
+        function selectHugeRole(role) {
+            document.getElementById('roleCardsContainer').style.display = 'none';
+            document.getElementById('innerFormsContainer').style.display = 'block';
+            
+            // Move forms into metallic frame if not already there
+            const mount = document.getElementById('innerFormsMount');
+            if (!mount.contains(document.getElementById('panelAuctioneer'))) {
+                mount.appendChild(document.getElementById('panelAuctioneer'));
+                mount.appendChild(document.getElementById('panelPlayer'));
+                
+                // Remove some padding/borders from the moved panels so they look clean inside the frame
+                document.getElementById('panelAuctioneer').style.padding = '0';
+                document.getElementById('panelPlayer').style.padding = '0';
+            }
+            
+            switchRole(role);
+        }
+
+        function backToCards() {
+            document.getElementById('roleCardsContainer').style.display = 'flex';
+            document.getElementById('innerFormsContainer').style.display = 'none';
+        }
 
         function switchRole(role) {
             document.getElementById('btnAuctioneer').classList.toggle('active',        role === 'auctioneer');
