@@ -794,8 +794,34 @@
         <!-- Card -->
         <div class="card">
 
+            <!-- ══ GOOGLE SIGN IN PANEL ══ -->
+            <div class="panel active" id="panelSignIn" style="text-align: center; padding: 2rem 0;">
+                <div class="panel-header">
+                    <div class="panel-title" style="color:var(--gold)">AUTHENTICATION REQUIRED</div>
+                    <div class="panel-desc">Please sign in with Google to enter the IPL Auction Arena.</div>
+                </div>
+                
+                <div id="g_id_onload"
+                     data-client_id="YOUR_GOOGLE_CLIENT_ID"
+                     data-context="signin"
+                     data-ux_mode="popup"
+                     data-callback="handleCredentialResponse"
+                     data-auto_prompt="false">
+                </div>
+                
+                <div class="g_id_signin"
+                     data-type="standard"
+                     data-shape="rectangular"
+                     data-theme="outline"
+                     data-text="signin_with"
+                     data-size="large"
+                     data-logo_alignment="left"
+                     style="display: flex; justify-content: center; margin-top: 1rem;">
+                </div>
+            </div>
+
             <!-- Role Selector -->
-            <div class="role-selector" id="roleSelector" style="display: grid;">
+            <div class="role-selector" id="roleSelector" style="display: none;">
                 <button class="role-btn active" id="btnAuctioneer" onclick="switchRole('auctioneer')">
                     <span class="role-icon">🎙️</span> AUCTIONEER
                 </button>
@@ -805,7 +831,7 @@
             </div>
 
             <!-- ══ AUCTIONEER PANEL ══ -->
-            <div class="panel active" id="panelAuctioneer">
+            <div class="panel" id="panelAuctioneer">
 
                 <!-- Step 1: Create Room -->
                 <div id="stepCreate">
