@@ -241,6 +241,51 @@
             opacity: 0.6;
         }
 
+        /* ── GOOGLE SIGN-IN BOX ── */
+        .google-auth-box {
+            background: rgba(10, 15, 24, 0.6);
+            border: 1px solid var(--border2);
+            padding: 2.5rem 1.5rem;
+            margin: 2rem 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .google-auth-box:hover {
+            border-color: var(--cyan);
+            box-shadow: 0 8px 32px rgba(0, 212, 255, 0.15);
+        }
+
+        .google-auth-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+            opacity: 0.8;
+        }
+
+        .google-auth-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            color: var(--cyan);
+            text-shadow: 0 0 15px var(--cyan-dim);
+            animation: pulse-glow 2.5s infinite alternate;
+        }
+        
+        @keyframes pulse-glow {
+            from { text-shadow: 0 0 10px rgba(0, 212, 255, 0.2); transform: scale(1); }
+            to { text-shadow: 0 0 30px rgba(0, 212, 255, 0.6); transform: scale(1.08); }
+        }
+
         /* ── ROLE SELECTOR ── */
         .role-selector {
             display: grid;
@@ -795,28 +840,31 @@
         <div class="card">
 
             <!-- ══ GOOGLE SIGN IN PANEL ══ -->
-            <div class="panel active" id="panelSignIn" style="text-align: center; padding: 2rem 0;">
+            <div class="panel active" id="panelSignIn" style="text-align: center;">
                 <div class="panel-header">
-                    <div class="panel-title" style="color:var(--gold)">AUTHENTICATION REQUIRED</div>
-                    <div class="panel-desc">Please sign in with Google to enter the IPL Auction Arena.</div>
+                    <div class="panel-title" style="color:var(--gold); font-size: 1.8rem; letter-spacing: 3px;">SECURE ACCESS</div>
+                    <div class="panel-desc" style="color: #8892b0; font-size: 0.85rem; margin-top: 0.5rem;">Authenticate with Google to enter the arena</div>
                 </div>
                 
-                <div id="g_id_onload"
-                     data-client_id="600220162960-9pvdp6274qq5n14q8i04g5nahu4rrge1.apps.googleusercontent.com"
-                     data-context="signin"
-                     data-ux_mode="popup"
-                     data-callback="handleCredentialResponse"
-                     data-auto_prompt="false">
-                </div>
-                
-                <div class="g_id_signin"
-                     data-type="standard"
-                     data-shape="rectangular"
-                     data-theme="outline"
-                     data-text="signin_with"
-                     data-size="large"
-                     data-logo_alignment="left"
-                     style="display: flex; justify-content: center; margin-top: 1rem;">
+                <div class="google-auth-box">
+                    <div class="google-auth-icon">🛡️</div>
+                    <div id="g_id_onload"
+                         data-client_id="600220162960-9pvdp6274qq5n14q8i04g5nahu4rrge1.apps.googleusercontent.com"
+                         data-context="signin"
+                         data-ux_mode="popup"
+                         data-callback="handleCredentialResponse"
+                         data-auto_prompt="false">
+                    </div>
+                    
+                    <div class="g_id_signin"
+                         data-type="standard"
+                         data-shape="rectangular"
+                         data-theme="outline"
+                         data-text="signin_with"
+                         data-size="large"
+                         data-logo_alignment="left"
+                         style="margin-top: 0.5rem; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));">
+                    </div>
                 </div>
             </div>
 
