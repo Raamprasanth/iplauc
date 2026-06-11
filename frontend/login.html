@@ -12,21 +12,21 @@
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
         :root {
-            --bg: #04080e;
-            --surface: #0a0f18;
-            --surface2: #111827;
-            --border: #1a2535;
-            --border2: #243044;
-            --gold: #f5b800;
-            --gold2: #ffe066;
-            --gold-dim: rgba(245, 184, 0, 0.12);
-            --cyan: #00d4ff;
-            --cyan-dim: rgba(0, 212, 255, 0.1);
-            --red: #ff3b3b;
+            --bg: #140303;
+            --surface: #200505;
+            --surface2: #2d0a0a;
+            --border: #4a1010;
+            --border2: #651515;
+            --gold: #d4af37;
+            --gold2: #f1db8b;
+            --gold-dim: rgba(212, 175, 55, 0.12);
+            --cyan: #e82a2a;
+            --cyan-dim: rgba(232, 42, 42, 0.1);
+            --red: #ff2a2a;
             --green: #00e676;
-            --text: #e8edf5;
-            --muted: #5e7a96;
-            --muted2: #8fa8c0;
+            --text: #f5f0e6;
+            --muted: #b89c9c;
+            --muted2: #d6bcbc;
             --font-d: 'Bebas Neue', sans-serif;
             --font-b: 'Rajdhani', sans-serif;
             --font-m: 'Share Tech Mono', monospace;
@@ -56,121 +56,20 @@
         }
 
         /* ── ANIMATED BACKGROUND ── */
-        .bg-scene {
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            overflow: hidden;
-        }
-
-        .bg-grid {
-            position: absolute;
-            inset: 0;
+        .hero-grid-bg {
+            position: fixed; inset: 0; z-index: 0;
             background-image:
-                linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
-            background-size: 48px 48px;
+                linear-gradient(rgba(232,42,42,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(232,42,42,0.04) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridPan 20s linear infinite;
         }
+        @keyframes gridPan { from { transform: translateY(0); } to { transform: translateY(60px); } }
 
-        .bg-orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            animation: orbFloat 8s ease-in-out infinite alternate;
-        }
-
-        .bg-orb-1 {
-            width: 500px;
-            height: 500px;
-            top: -100px;
-            left: -100px;
-            background: radial-gradient(circle, rgba(245, 184, 0, 0.08), transparent 70%);
-            animation-duration: 9s;
-        }
-
-        .bg-orb-2 {
-            width: 400px;
-            height: 400px;
-            bottom: -100px;
-            right: -100px;
-            background: radial-gradient(circle, rgba(0, 212, 255, 0.07), transparent 70%);
-            animation-duration: 7s;
-            animation-direction: alternate-reverse;
-        }
-
-        .bg-orb-3 {
-            width: 300px;
-            height: 300px;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: radial-gradient(circle, rgba(245, 184, 0, 0.04), transparent 70%);
-            animation-duration: 11s;
-        }
-
-        @keyframes orbFloat {
-            from {
-                transform: translate(0, 0) scale(1);
-            }
-
-            to {
-                transform: translate(30px, 20px) scale(1.1);
-            }
-        }
-
-        .bg-particles {
-            position: absolute;
-            inset: 0;
-        }
-
-        .particle {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: var(--gold);
-            border-radius: 50%;
-            animation: particleDrift linear infinite;
-            opacity: 0;
-        }
-
-        @keyframes particleDrift {
-            0% {
-                opacity: 0;
-                transform: translateY(100vh) scale(0);
-            }
-
-            10% {
-                opacity: 0.6;
-            }
-
-            90% {
-                opacity: 0.3;
-            }
-
-            100% {
-                opacity: 0;
-                transform: translateY(-10vh) scale(1.5);
-            }
-        }
-
-        /* ── STADIUM BACKGROUND ── */
-        .bg-stadium {
-            position: fixed;
-            inset: 0;
-            z-index: 1; /* above animated bg but below content */
-            background: url('https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?auto=format&fit=crop&q=80&w=2000') no-repeat center center;
-            background-size: cover;
-            filter: grayscale(30%) sepia(20%) brightness(0.25) contrast(1.4);
-            opacity: 1;
-            transition: opacity 1s ease;
-            pointer-events: none;
-        }
-
-        .bg-stadium::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: url('data:image/svg+xml;utf8,<svg width="4" height="4" xmlns="http://www.w3.org/2000/svg"><rect width="4" height="4" fill="none"/><path d="M0 0l4 4ZM4 0L0 4Z" stroke="rgba(0,0,0,0.3)" stroke-width="1"/></svg>');
+        .hero-glow {
+            position: fixed; top: 30%; left: 50%; transform: translate(-50%,-50%);
+            width: 700px; height: 400px; z-index: 0;
+            background: radial-gradient(ellipse, rgba(212,175,55,0.12) 0%, transparent 70%);
             pointer-events: none;
         }
 
@@ -196,41 +95,45 @@
             line-height: 1.1;
         }
 
-        .huge-title .gr { color: #ccc; font-size: 64px; display: block;}
+        .huge-title .gr { color: var(--gold); font-size: 64px; display: block;}
 
         .metallic-frame {
-            background: linear-gradient(180deg, #2a2d34, #121418);
-            border: 4px solid #4a4f58;
-            border-radius: 12px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,0,0,0.9);
+            background: rgba(20, 3, 3, 0.85); /* Deep red/black */
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(212, 175, 55, 0.3); /* gold subtle border */
+            border-top: 4px solid var(--gold);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.9), inset 0 0 40px rgba(232, 42, 42, 0.05);
             width: 100%;
             position: relative;
             overflow: hidden;
+            border-radius: 0;
+            clip-path: polygon(30px 0%, 100% 0%, 100% calc(100% - 30px), calc(100% - 30px) 100%, 0% 100%, 0% 30px);
         }
         
         .frame-header-tabs {
             display: flex;
             justify-content: center;
             gap: 40px;
-            background: #111;
-            border-bottom: 2px solid #333;
+            background: rgba(20, 3, 3, 0.95);
+            border-bottom: 1px solid var(--border);
             padding: 15px 10px;
         }
 
         .frame-tab {
             font-family: var(--font-d);
             font-size: 22px;
-            color: #666;
+            color: var(--muted);
             letter-spacing: 2px;
             cursor: pointer;
             border-bottom: 2px solid transparent;
             padding: 0 5px 5px 5px;
+            transition: color 0.2s;
         }
 
         .frame-tab.active {
-            color: var(--green);
-            border-bottom: 2px solid var(--green);
-            text-shadow: 0 0 10px rgba(0,255,0,0.4);
+            color: var(--gold);
+            border-bottom: 2px solid var(--gold);
+            text-shadow: 0 0 10px rgba(212,175,55,0.4);
         }
 
         /* ── LARGE ROLE CARDS ── */
@@ -243,65 +146,64 @@
 
         .rc-huge {
             flex: 1;
-            background: #050505;
-            border-radius: 12px;
+            background: var(--surface2);
             overflow: hidden;
-            border: 2px solid #333;
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--border);
             transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             cursor: pointer;
+            align-items: stretch;
         }
 
         .rc-huge:hover {
-            transform: translateY(-5px);
+            transform: translateY(-3px);
         }
 
         .rc-auc {
-            border-color: #1b4d24;
-            box-shadow: 0 0 20px rgba(0,255,0,0.05);
+            border-left-color: var(--gold);
         }
         .rc-auc:hover {
-            border-color: var(--green);
-            box-shadow: 0 0 40px rgba(0,255,0,0.2);
+            border-color: var(--gold);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.5);
         }
-        .rc-auc .rc-title { color: #fff; text-shadow: 0 0 15px rgba(0,255,0,0.5); }
-        .rc-auc .rc-btn { background: linear-gradient(180deg, #6ae580, #228b22); color: #000; box-shadow: 0 0 15px rgba(0,255,0,0.3); }
+        .rc-auc .rc-title { color: var(--gold); text-align: left; text-shadow: 0 0 15px rgba(212,175,55,0.5); }
+        .rc-auc .rc-btn { background: var(--gold); color: #000; clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%); }
 
         .rc-player {
-            border-color: #333;
-            box-shadow: 0 0 20px rgba(255,255,255,0.05);
+            border-left-color: var(--cyan);
         }
         .rc-player:hover {
-            border-color: #aaa;
-            box-shadow: 0 0 40px rgba(255,255,255,0.1);
+            border-color: var(--cyan);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.5);
         }
-        .rc-player .rc-btn { background: linear-gradient(180deg, #444, #111); color: #fff; border: 1px solid #555; }
+        .rc-player .rc-title { color: var(--text); text-align: left; }
+        .rc-player .rc-btn { background: transparent; color: var(--cyan); border: 1px solid var(--cyan); clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%); }
 
         .rc-title {
             font-family: var(--font-d);
             font-size: 48px;
-            text-align: center;
-            padding: 15px 0;
+            text-align: left;
+            padding: 0 0 10px 0;
             letter-spacing: 3px;
         }
 
         .rc-image {
-            height: 250px;
+            width: 200px;
             background-size: cover;
             background-position: center;
-            border-top: 1px solid #222;
-            border-bottom: 1px solid #222;
+            border-right: 1px solid var(--border);
         }
-        .rc-auc .rc-image { background-image: url('https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&q=80&w=600'); filter: grayscale(100%) sepia(100%) hue-rotate(80deg) saturate(200%) contrast(1.2); }
-        .rc-player .rc-image { background-image: url('https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?auto=format&fit=crop&q=80&w=600'); filter: grayscale(50%) contrast(1.2); }
+        .rc-auc .rc-image { background-image: url('https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&q=80&w=600'); filter: sepia(50%) hue-rotate(330deg) saturate(150%) contrast(1.2); }
+        .rc-player .rc-image { background-image: url('https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?auto=format&fit=crop&q=80&w=600'); filter: sepia(30%) hue-rotate(320deg) contrast(1.2); }
 
         .rc-content {
             padding: 20px;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: center;
         }
 
         .rc-desc-title {
@@ -316,7 +218,7 @@
             list-style-type: disc;
             padding-left: 20px;
             font-family: var(--font-b);
-            color: #aaa;
+            color: var(--muted);
             font-size: 16px;
             font-weight: 600;
             margin-bottom: 25px;
@@ -327,7 +229,7 @@
             width: 100%;
             padding: 12px;
             border: none;
-            border-radius: 6px;
+            border-radius: 0;
             font-family: var(--font-d);
             font-size: 24px;
             letter-spacing: 2px;
@@ -338,31 +240,32 @@
         .rc-btn:active { transform: scale(0.97); }
 
         .frame-footer {
-            background: #0a0a0a;
+            background: rgba(20, 3, 3, 0.95);
             padding: 15px 25px;
             font-family: var(--font-d);
-            color: #888;
+            color: var(--muted);
             letter-spacing: 2px;
             font-size: 18px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-top: 1px solid #222;
+            border-top: 1px solid var(--border);
         }
 
         .exit-btn {
             background: #222;
             color: #fff;
-            border: 1px solid #444;
+            border: 1px solid var(--border2);
             padding: 6px 20px;
             font-family: var(--font-d);
             font-size: 16px;
             letter-spacing: 1px;
-            border-radius: 4px;
+            border-radius: 0;
             cursor: pointer;
             transition: 0.2s;
+            clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
         }
-        .exit-btn:hover { background: #ff3b3b; border-color: #ff3b3b; color: #fff; }
+        .exit-btn:hover { background: var(--cyan); border-color: var(--cyan); color: #000; }
 
         /* ── GAME MODES CARDS (LOCKER ROOM) ── */
         .gm-cards-container {
@@ -375,10 +278,10 @@
 
         .gm-card {
             flex: 1;
-            height: 400px;
-            background: #0a0a0c;
-            border: 2px solid #222;
-            border-radius: 8px;
+            height: 250px;
+            background: rgba(20,3,3,0.9);
+            border: 1px solid var(--border);
+            border-radius: 0;
             position: relative;
             overflow: hidden;
             cursor: pointer;
@@ -387,10 +290,11 @@
             align-items: flex-end;
             padding: 25px;
             box-shadow: inset 0 0 50px rgba(0,0,0,0.8);
+            clip-path: polygon(20px 0%, 100% 0%, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0% 100%, 0% 20px);
         }
 
         .gm-card:hover {
-            transform: scale(1.02) translateY(-10px);
+            transform: scale(1.02) translateY(-5px);
         }
 
         .gm-bg {
@@ -400,13 +304,13 @@
             background-position: center;
             opacity: 0.4;
             transition: 0.4s;
-            filter: grayscale(80%) contrast(1.2);
+            filter: grayscale(60%) sepia(40%) hue-rotate(330deg) contrast(1.2);
             z-index: 0;
         }
         
         .gm-card:hover .gm-bg {
             opacity: 0.8;
-            filter: grayscale(0%) contrast(1.1);
+            filter: grayscale(0%) sepia(20%) hue-rotate(330deg) contrast(1.1);
         }
 
         .gm-auction .gm-bg { background-image: url('https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?w=800'); }
@@ -415,7 +319,7 @@
 
         .gm-auction:hover { border-color: var(--gold); box-shadow: 0 10px 30px rgba(245,184,0,0.2), inset 0 0 50px rgba(245,184,0,0.1); }
         .gm-dynasty:hover { border-color: var(--green); box-shadow: 0 10px 30px rgba(0,255,0,0.2), inset 0 0 50px rgba(0,255,0,0.1); }
-        .gm-quick:hover { border-color: var(--cyan); box-shadow: 0 10px 30px rgba(0,212,255,0.2), inset 0 0 50px rgba(0,212,255,0.1); }
+        .gm-quick:hover { border-color: var(--cyan); box-shadow: 0 10px 30px rgba(232,42,42,0.2), inset 0 0 50px rgba(232,42,42,0.1); }
 
         .gm-content {
             position: relative;
@@ -458,14 +362,11 @@
             flex-direction: column;
             align-items: center;
             width: 100%;
-            max-width: 400px;
+            max-width: 450px;
             padding: 1.5rem 1rem;
             animation: pageIn 0.6s ease both;
             transition: opacity 0.5s ease;
         }
-
-        /* ── BG STADIUM ── */
-        <div class="bg-stadium" id="bgStadium"></div>
 
         @keyframes pageIn {
             from {
@@ -487,7 +388,7 @@
         }
 
         .logo-icon {
-            font-size: 3rem;
+            font-size: 3.5rem;
             display: block;
             margin-bottom: 0.5rem;
             filter: drop-shadow(2px 2px 0px #000);
@@ -495,10 +396,10 @@
 
         .logo-title {
             font-family: var(--font-d);
-            font-size: 3.2rem;
+            font-size: 3.5rem;
             letter-spacing: 8px;
             color: #fff;
-            text-shadow: 4px 4px 0px #000, -2px -2px 0px #1b4d24;
+            text-shadow: 4px 4px 0px #000, -2px -2px 0px var(--cyan);
             line-height: 1;
             text-transform: uppercase;
         }
@@ -507,21 +408,23 @@
             font-family: var(--font-d);
             font-size: 1.2rem;
             letter-spacing: 8px;
-            color: var(--green);
+            color: var(--gold);
             margin-top: 0.5rem;
             text-shadow: 2px 2px 0px #000;
         }
 
-        /* ── CARD (GRITTY TEXTURE) ── */
+        /* ── CARD (COMMAND CENTER TEXTURE) ── */
         .card {
             width: 100%;
-            background: radial-gradient(circle at top right, #1a201c, #0a0c0a);
-            border: 2px solid #2a382d;
-            border-radius: 8px;
+            background: rgba(20, 3, 3, 0.85); /* Deep red/black */
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(212, 175, 55, 0.3); /* gold subtle border */
+            border-top: 4px solid var(--gold);
             padding: 2.5rem 2rem;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.9), inset 0 0 40px rgba(0,0,0,0.8);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.9), inset 0 0 40px rgba(232, 42, 42, 0.05);
+            clip-path: polygon(30px 0%, 100% 0%, 100% calc(100% - 30px), calc(100% - 30px) 100%, 0% 100%, 0% 30px);
         }
 
         .card::before {
@@ -531,7 +434,7 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(90deg, #1b4d24, #00e676, #1b4d24);
+            background: linear-gradient(90deg, var(--red), var(--gold), var(--red));
         }
 
         /* ── GOOGLE SIGN-IN (ESPORTS BUTTON) ── */
@@ -1171,14 +1074,8 @@
 <body>
 
     <!-- Animated Background -->
-    <div class="bg-scene">
-        <div class="bg-grid"></div>
-        <div class="bg-orb bg-orb-1"></div>
-        <div class="bg-orb bg-orb-2"></div>
-        <div class="bg-orb bg-orb-3"></div>
-        <div class="bg-particles" id="particles"></div>
-    </div>
-    <div class="bg-stadium" id="bgStadium"></div>
+    <div class="hero-grid-bg"></div>
+    <div class="hero-glow" id="bgStadium"></div>
 
     <!-- Main -->
     <div class="login-container" id="loginContainer">
@@ -1202,7 +1099,7 @@
                 
                 <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 2rem;">
                     <!-- Simulation Box -->
-                    <div class="gm-card" style="height: 180px; padding: 15px; flex: 1; border-color: var(--green); display: flex; flex-direction: column; align-items: center; justify-content: flex-end;" onclick="window.location.href='simulation.html'">
+                    <div class="gm-card" style="height: 180px; padding: 15px; flex: 1; border-color: var(--green); display: flex; flex-direction: column; align-items: center; justify-content: flex-end;" onclick="startSinglePlayerSim()">
                         <div class="gm-bg" style="background-image: url('https://images.unsplash.com/photo-1508344928928-7137b29de216?w=800');"></div>
                         <div class="gm-content" style="text-align: center;">
                             <div class="gm-title" style="font-size: 22px; color: var(--green); text-shadow: 1px 1px 5px #000;">SIMULATION</div>
@@ -1572,7 +1469,7 @@
                         <div class="gm-subtitle">THE CLASSIC DRAFT</div>
                     </div>
                 </div>
-                <div class="gm-card gm-dynasty" onclick="window.location.href='simulation.html'">
+                <div class="gm-card gm-dynasty" onclick="startSinglePlayerSim()">
                     <div class="gm-bg"></div>
                     <div class="gm-content">
                         <div class="gm-title">DYNASTY<br>MODE</div>
@@ -2416,6 +2313,21 @@
             }
         }
         spawnParticles();
+
+        async function startSinglePlayerSim() {
+            try {
+                showToast('🚀 INITIALIZING SINGLE PLAYER SEASON...', 'info');
+                const res = await fetch(`${API}/sim/singleplayer`, { method: 'POST' });
+                const json = await res.json();
+                if (json.success) {
+                    window.location.href = `simulation.html?room=${json.roomCode}&sp=true`;
+                } else {
+                    showToast('❌ FAILED TO CREATE SESSION: ' + json.message, 'error');
+                }
+            } catch (err) {
+                showToast('❌ ' + err.message, 'error');
+            }
+        }
 
         /* ══════════════════════════════
            RESTORE SESSION IF ACTIVE
