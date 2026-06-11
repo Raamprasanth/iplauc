@@ -161,6 +161,23 @@
         .play-btn:hover { box-shadow: 0 0 25px rgba(0,212,255,0.6); transform: scale(1.05); }
         .play-btn:disabled { background: var(--border); color: #888; box-shadow: none; transform: none; cursor: not-allowed; }
 
+        /* Single Player Team Selection Overlay */
+        #spTeamOverlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 1000;
+            display: none; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .sp-team-grid {
+            display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; max-width: 900px; margin-top: 30px;
+        }
+        .sp-team-card {
+            background: var(--surface2); border: 2px solid var(--border); border-radius: 8px;
+            padding: 20px; text-align: center; cursor: pointer; transition: 0.2s;
+        }
+        .sp-team-card:hover { transform: translateY(-5px); border-color: var(--gold); box-shadow: 0 5px 15px rgba(245, 184, 0, 0.2); }
+        .sp-team-abbr { font-family: 'Bebas Neue'; font-size: 32px; letter-spacing: 2px; }
+        .my-team-row { background: rgba(245, 184, 0, 0.15) !important; border: 1px solid var(--gold) !important; }
+        .my-team-text { color: var(--gold) !important; font-weight: bold; text-shadow: 0 0 5px rgba(245,184,0,0.5); }
+
     </style>
 </head>
 <body>
@@ -257,9 +274,20 @@
 
     <div class="toast" id="toast"></div>
 
+    <!-- SP Team Selection Overlay -->
+    <div id="spTeamOverlay">
+        <h1 style="font-family:'Bebas Neue'; color:var(--gold); font-size:48px; letter-spacing:4px; text-shadow:0 0 20px rgba(245,184,0,0.5);">SELECT YOUR FRANCHISE</h1>
+        <p style="font-family:'Rajdhani'; color:#aaa; font-size:18px;">You will manage this team through the season.</p>
+        <div class="sp-team-grid" id="spTeamGrid"></div>
+    </div>
+
     <script>
         const API = '/api';
-        let roomCode = new URLSearchParams(window.location.search).get('room');
+        const urlParams = new URLSearchParams(window.location.search);
+        let roomCode = urlParams.get('room');
+        const isSinglePlayer = urlParams.get('sp') === 'true';
+        let myTeamId = sessionStorage.getItem('sp_teamId') || null;
+
         let lobbyData = null;
         let activeMatch = null;
 
@@ -287,10 +315,46 @@
                 if (json.success) {
                     lobbyData = json.data;
                     document.getElementById('hSeason').textContent = lobbyData.currentSeason || 1;
-                    renderState();
+                    
+                    if (isSinglePlayer && !myTeamId) {
+                        showSPTeamSelector();
+                    } else {
+                        renderState();
+                        // Auto-generate schedule if single player and schedule doesn't exist
+                        const season = lobbyData.seasons.find(s => s.seasonNumber === (lobbyData.currentSeason || 1));
+                        if (isSinglePlayer && (!season || !season.schedule || season.schedule.length === 0)) {
+                            await generateSchedule();
+                        }
+                    }
                 }
             } catch (err) {
                 showToast('Failed to load state', 'error');
+            }
+        }
+
+        function showSPTeamSelector() {
+            const grid = document.getElementById('spTeamGrid');
+            grid.innerHTML = lobbyData.teams.map(t => `
+                <div class="sp-team-card" onclick="selectSPTeam('${t.localId}')" style="border-bottom: 4px solid ${t.color}">
+                    <div class="sp-team-abbr" style="color:${t.color}">${t.localId}</div>
+                    <div style="font-family:'Rajdhani'; font-weight:600; font-size:14px; margin-top:10px; color:#ddd;">${t.name}</div>
+                </div>
+            `).join('');
+            document.getElementById('spTeamOverlay').style.display = 'flex';
+        }
+
+        async function selectSPTeam(teamId) {
+            myTeamId = teamId;
+            sessionStorage.setItem('sp_teamId', teamId);
+            document.getElementById('spTeamOverlay').style.display = 'none';
+            showToast('Team Selected! Generating Schedule...', 'success');
+            
+            // Generate schedule if it doesn't exist
+            const season = lobbyData.seasons.find(s => s.seasonNumber === (lobbyData.currentSeason || 1));
+            if (!season || !season.schedule || season.schedule.length === 0) {
+                await generateSchedule();
+            } else {
+                renderState();
             }
         }
 
@@ -339,9 +403,10 @@
             
             ptsBody.innerHTML = standings.map(s => {
                 const t = lobbyData.teams.find(tm => tm.localId === s.teamLocalId);
+                const isMyTeam = s.teamLocalId === myTeamId;
                 return `
-                    <tr>
-                        <td style="color:${t?t.color:'#fff'}">${t?t.name:s.teamLocalId}</td>
+                    <tr class="${isMyTeam ? 'my-team-row' : ''}">
+                        <td style="color:${t?t.color:'#fff'}; font-weight:${isMyTeam ? 'bold' : 'normal'}">${t?t.name:s.teamLocalId} ${isMyTeam ? '⭐' : ''}</td>
                         <td>${s.played}</td>
                         <td>${s.won}</td>
                         <td>${s.lost}</td>
@@ -357,20 +422,30 @@
                 const t2 = lobbyData.teams.find(tm => tm.localId === m.team2);
                 if (m.status !== 'PLAYED') allPlayed = false;
                 
+                const isMyMatch = isSinglePlayer && (m.team1 === myTeamId || m.team2 === myTeamId);
+                let actionBtn = '';
+
+                if (m.status === 'PLAYED') {
+                    actionBtn = `<span style="color:var(--green); font-weight:bold; font-size:14px;">${m.summary}</span>`;
+                } else if (isSinglePlayer) {
+                    if (isMyMatch) {
+                        actionBtn = `<button class="fix-btn" style="background:var(--cyan); color:#000;" onclick="setupMatch('${m.matchId}')">PLAY MATCH</button>`;
+                    } else {
+                        actionBtn = `<button class="fix-btn" style="background:#444; color:#fff;" onclick="quickSimulate('${m.matchId}')">SIMULATE</button>`;
+                    }
+                } else {
+                    actionBtn = `<button class="fix-btn" onclick="setupMatch('${m.matchId}')">SELECT</button>`;
+                }
+                
                 return `
-                    <div class="fixture-card">
+                    <div class="fixture-card" style="${isMyMatch ? 'border-color: var(--cyan); background: rgba(0,212,255,0.05);' : ''}">
                         <div style="display:flex; align-items:center; gap:15px;">
                             <div style="color:#888; font-weight:bold; font-size:12px;">MATCH ${idx+1}</div>
-                            <div class="fix-team" style="color:${t1?t1.color:'#fff'}">${t1?t1.name:m.team1}</div>
+                            <div class="fix-team ${m.team1 === myTeamId ? 'my-team-text' : ''}" style="color:${t1?t1.color:'#fff'}">${t1?t1.name:m.team1}</div>
                             <div class="fix-vs">VS</div>
-                            <div class="fix-team" style="color:${t2?t2.color:'#fff'}">${t2?t2.name:m.team2}</div>
+                            <div class="fix-team ${m.team2 === myTeamId ? 'my-team-text' : ''}" style="color:${t2?t2.color:'#fff'}">${t2?t2.name:m.team2}</div>
                         </div>
-                        <div>
-                            ${m.status === 'PLAYED' 
-                                ? `<span style="color:var(--green); font-weight:bold; font-size:14px;">${m.summary}</span>` 
-                                : `<button class="fix-btn" onclick="setupMatch('${m.matchId}')">SELECT</button>`
-                            }
-                        </div>
+                        <div>${actionBtn}</div>
                     </div>
                 `;
             }).join('');
@@ -418,9 +493,6 @@
             const speed = document.getElementById('simSpeed').value;
             
             // Simple probability simulation (randomized T20 logic)
-            // In a real app, this would use player stats. 
-            // For now, we simulate realistically randomized innings.
-            
             const t1Score = generateInnings();
             const t2Score = generateInnings(t1Score.runs); // chase
 
@@ -431,6 +503,21 @@
                 // Animate Over-by-Over or Ball-by-Ball
                 animateInnings(t1Score, t2Score, speed);
             }
+        }
+
+        async function quickSimulate(matchId) {
+            const season = lobbyData.seasons.find(s => s.seasonNumber === (lobbyData.currentSeason || 1));
+            activeMatch = season.schedule.find(m => m.matchId === matchId);
+            
+            const t1 = lobbyData.teams.find(tm => tm.localId === activeMatch.team1);
+            const t2 = lobbyData.teams.find(tm => tm.localId === activeMatch.team2);
+            document.getElementById('sbT1Name').textContent = t1.name;
+            document.getElementById('sbT2Name').textContent = t2.name;
+
+            const t1Score = generateInnings();
+            const t2Score = generateInnings(t1Score.runs);
+            
+            await saveMatchResult(t1Score, t2Score);
         }
 
         function generateInnings(target = 999) {

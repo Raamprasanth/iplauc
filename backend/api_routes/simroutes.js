@@ -27,6 +27,62 @@ function generateRoundRobin(teams) {
     return schedule;
 }
 
+// Helper: generate code for single player
+function generateSPCode() {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let code = 'SP-';
+    for (let i = 0; i < 4; i++) code += chars[Math.floor(Math.random() * chars.length)];
+    return code;
+}
+
+const defaultFranchises = [
+    { localId: "CSK", name: "Chennai Super Kings", budget: 1200000000, color: "#FFFF00" },
+    { localId: "MI", name: "Mumbai Indians", budget: 1200000000, color: "#004BA0" },
+    { localId: "RCB", name: "Royal Challengers Bangalore", budget: 1200000000, color: "#E3292E" },
+    { localId: "KKR", name: "Kolkata Knight Riders", budget: 1200000000, color: "#3A225D" },
+    { localId: "DC", name: "Delhi Capitals", budget: 1200000000, color: "#00008B" },
+    { localId: "RR", name: "Rajasthan Royals", budget: 1200000000, color: "#FFC0CB" },
+    { localId: "PBKS", name: "Punjab Kings", budget: 1200000000, color: "#ED1B24" },
+    { localId: "SRH", name: "Sunrisers Hyderabad", budget: 1200000000, color: "#FF822A" },
+    { localId: "LSG", name: "Lucknow Super Giants", budget: 1200000000, color: "#005DA0" },
+    { localId: "GT", name: "Gujarat Titans", budget: 1200000000, color: "#1B2133" }
+];
+
+/* ------------------------------------------------------------------
+   POST /api/sim/singleplayer
+   Creates a single-player simulation lobby instantly
+------------------------------------------------------------------ */
+router.post('/sim/singleplayer', async (req, res) => {
+    try {
+        let code;
+        let attempts = 0;
+        do {
+            code = generateSPCode();
+            attempts++;
+            if (attempts > 10) throw new Error('Could not generate unique SP code.');
+        } while (await Lobby.findOne({ roomCode: code }));
+
+        const newLobby = new Lobby({
+            roomCode: code,
+            createdBy: 'Player',
+            status: 'SIMULATION',
+            teams: defaultFranchises.map(f => ({
+                localId: f.localId,
+                name: f.name,
+                budget: f.budget,
+                color: f.color,
+                isAI: true
+            }))
+        });
+
+        await newLobby.save();
+        res.status(201).json({ success: true, roomCode: code });
+    } catch (err) {
+        console.error('Error creating single-player session:', err);
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
+
 /* ------------------------------------------------------------------
    POST /api/sim/:code/generate-schedule
    Transitions a FINISHED lobby to SIMULATION, generates Season 1 schedule
