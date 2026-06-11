@@ -1608,6 +1608,9 @@
                     // Show metallic UI
                     document.getElementById('bgStadium').style.opacity = '1';
                     document.getElementById('metallicFrameWrap').style.display = 'block';
+                    
+                    // Immediately jump to Game Modes Selection
+                    switchFrameTab('game');
                 } else {
                     showToast('Authentication failed.', 'error');
                 }
@@ -1701,6 +1704,16 @@
             document.getElementById('tabContentLobby').style.display = (tabId === 'lobby') ? 'block' : 'none';
             document.getElementById('tabContentRole').style.display = (tabId === 'role') ? 'flex' : 'none';
             document.getElementById('tabContentGame').style.display = (tabId === 'game') ? 'flex' : 'none';
+            
+            // Update Title
+            const titleEl = document.querySelector('.huge-title');
+            if (tabId === 'game') {
+                titleEl.innerHTML = 'CHOOSE YOUR <span class="gr">GAME MODE</span>';
+            } else if (tabId === 'role') {
+                titleEl.innerHTML = 'MULTIPLAYER <span class="gr">ROLE SELECTION</span>';
+            } else {
+                titleEl.innerHTML = 'MULTIPLAYER <span class="gr">LOBBY</span>';
+            }
             
             // Hide inner forms if we leave the role tab
             if (tabId !== 'role') {
