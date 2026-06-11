@@ -236,6 +236,7 @@
         /* ── LARGE ROLE CARDS ── */
         .role-cards-container {
             display: flex;
+            flex-direction: column;
             gap: 20px;
             padding: 25px;
         }
@@ -366,6 +367,7 @@
         /* ── GAME MODES CARDS (LOCKER ROOM) ── */
         .gm-cards-container {
             display: flex;
+            flex-direction: column;
             gap: 20px;
             padding: 25px;
             justify-content: center;
@@ -1198,7 +1200,7 @@
                     <div class="panel-desc" style="color: #8892b0; font-size: 1rem; margin-top: 0.5rem;">Select your gameplay experience</div>
                 </div>
                 
-                <div style="display: flex; gap: 15px; margin-top: 2rem;">
+                <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 2rem;">
                     <!-- Simulation Box -->
                     <div class="gm-card" style="height: 180px; padding: 15px; flex: 1; border-color: var(--green); display: flex; flex-direction: column; align-items: center; justify-content: flex-end;" onclick="window.location.href='simulation.html'">
                         <div class="gm-bg" style="background-image: url('https://images.unsplash.com/photo-1508344928928-7137b29de216?w=800');"></div>
