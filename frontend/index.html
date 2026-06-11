@@ -8,17 +8,17 @@
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #070a0f;
-      --surface: #0d1117;
-      --surface2: #161b24;
-      --border: #1e2a3a;
-      --gold: #f5b800;
-      --gold2: #ffda6a;
-      --red: #e02020;
-      --cyan: #00d4ff;
+      --bg: #140303;
+      --surface: #200505;
+      --surface2: #2d0a0a;
+      --border: #4a1010;
+      --gold: #d4af37;
+      --gold2: #f1db8b;
+      --red: #ff2a2a;
+      --cyan: #e82a2a;
       --green: #00e676;
-      --text: #e8edf5;
-      --muted: #7a8fa6;
+      --text: #f5f0e6;
+      --muted: #b89c9c;
       --font-display: 'Bebas Neue', sans-serif;
       --font-body: 'Rajdhani', sans-serif;
       --font-mono: 'Share Tech Mono', monospace;
@@ -52,7 +52,7 @@
       font-size: 1.8rem;
       letter-spacing: 3px;
       color: var(--gold);
-      text-shadow: 0 0 20px rgba(245,184,0,0.5);
+      text-shadow: 0 0 20px rgba(212,175,55,0.5);
     }
     .nav-links { display: flex; gap: 2rem; list-style: none; }
     .nav-links a {
@@ -94,8 +94,8 @@
     .hero-grid-bg {
       position: absolute; inset: 0;
       background-image:
-        linear-gradient(rgba(0,212,255,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,212,255,0.04) 1px, transparent 1px);
+        linear-gradient(rgba(232,42,42,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(232,42,42,0.04) 1px, transparent 1px);
       background-size: 60px 60px;
       animation: gridPan 20s linear infinite;
     }
@@ -104,7 +104,7 @@
     .hero-glow {
       position: absolute; top: 30%; left: 50%; transform: translate(-50%,-50%);
       width: 700px; height: 400px;
-      background: radial-gradient(ellipse, rgba(245,184,0,0.12) 0%, transparent 70%);
+      background: radial-gradient(ellipse, rgba(212,175,55,0.12) 0%, transparent 70%);
       pointer-events: none;
     }
 
@@ -113,7 +113,7 @@
       font-size: 0.7rem;
       letter-spacing: 4px;
       color: var(--cyan);
-      border: 1px solid rgba(0,212,255,0.3);
+      border: 1px solid rgba(232,42,42,0.3);
       padding: 0.4rem 1rem;
       margin-bottom: 1.5rem;
       animation: fadeDown 0.6s ease both;
@@ -151,7 +151,7 @@
       clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
       transition: transform 0.15s, box-shadow 0.15s;
     }
-    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(245,184,0,0.4); }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(212,175,55,0.4); }
     .btn-secondary {
       background: transparent;
       color: var(--cyan);
@@ -163,7 +163,7 @@
       clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
       transition: background 0.2s, transform 0.15s;
     }
-    .btn-secondary:hover { background: rgba(0,212,255,0.08); transform: translateY(-3px); }
+    .btn-secondary:hover { background: rgba(232,42,42,0.08); transform: translateY(-3px); }
 
     .hero-stats {
       display: flex; gap: 3rem; margin-top: 4rem; flex-wrap: wrap; justify-content: center;
@@ -230,7 +230,7 @@
       position: absolute; right: 1rem; top: 0.5rem;
       font-family: var(--font-display);
       font-size: 4rem;
-      color: rgba(245,184,0,0.06);
+      color: rgba(212,175,55,0.06);
       line-height: 1;
     }
     .fact-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.4); }
@@ -305,7 +305,7 @@
     .mechanic-step {
       font-family: var(--font-display);
       font-size: 3rem;
-      color: rgba(0,212,255,0.15);
+      color: rgba(232,42,42,0.15);
       position: absolute; top: 0.5rem; right: 1rem;
     }
     .mechanic-icon { font-size: 2rem; margin-bottom: 0.8rem; }
@@ -337,7 +337,7 @@
       width: 14px; height: 14px;
       border-radius: 50%;
       background: var(--gold);
-      box-shadow: 0 0 12px rgba(245,184,0,0.5);
+      box-shadow: 0 0 12px rgba(212,175,55,0.5);
     }
     .timeline-year {
       font-family: var(--font-display);
@@ -375,7 +375,7 @@
       font-size: 0.9rem;
       border-bottom: 1px solid rgba(30,42,58,0.5);
     }
-    .leaderboard-table tr:hover td { background: rgba(245,184,0,0.03); }
+    .leaderboard-table tr:hover td { background: rgba(212,175,55,0.03); }
     .rank-badge {
       display: inline-flex; align-items: center; justify-content: center;
       width: 28px; height: 28px;
